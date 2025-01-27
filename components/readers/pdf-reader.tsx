@@ -11,7 +11,7 @@ import { PDFViewer } from "./pdf/viewer";
 import { SearchResult } from "./pdf/types";
 import { searchInDocument } from "./pdf/utils";
 import { TableOfContents } from "./pdf/table-of-contents";
-
+import { PDFToolbar } from "./pdf/pdf-toolbar";
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
 
@@ -169,17 +169,17 @@ export function PDFReader({ url, title }: PDFReaderProps) {
 
   return (
     <div className="relative flex flex-col items-center min-h-screen bg-gray-50">
-      <ReaderToolbar
-        bookTitle={title}
-        currentPage={pageNumber}
-        totalPages={numPages}
-        scale={scale}
-        showZoom={true}
-        onPageChange={setPageNumber}
-        onScaleChange={setScale}
-        onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}
-        onToggleToc={() => setIsTocOpen(!isTocOpen)}
-      />
+      <ReaderToolbar bookTitle={title}>
+        <PDFToolbar
+          currentPage={pageNumber}
+          totalPages={numPages}
+          scale={scale}
+          onPageChange={setPageNumber}
+          onScaleChange={setScale}
+          onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}
+          onToggleToc={() => setIsTocOpen(!isTocOpen)}
+        />
+      </ReaderToolbar>
 
       <TableOfContents
         isOpen={isTocOpen}

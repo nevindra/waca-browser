@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Book as EPub } from 'epubjs';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useEffect, useRef, useState } from "react";
+import { Book as EPub } from "epubjs";
+import { ReaderToolbar } from "@/components/readers/shared/reader-toolbar";
+import { EPubToolbar } from "./epub/epub-toolbar";
 
 interface EPubReaderProps {
   url: string;
@@ -23,8 +23,8 @@ export function EPubReader({ url }: EPubReaderProps) {
 
     book.ready.then(() => {
       const rendition = book.renderTo(viewerRef.current!, {
-        width: '100%',
-        height: '600px',
+        width: "100%",
+        height: "600px",
       });
 
       rendition.display();
@@ -44,40 +44,27 @@ export function EPubReader({ url }: EPubReaderProps) {
   const goToNextPage = () => {
     if (!book || currentPage >= totalPages - 1) return;
     book.rendition.next();
-    setCurrentPage(prev => prev + 1);
+    setCurrentPage((prev) => prev + 1);
   };
 
   const goToPrevPage = () => {
     if (!book || currentPage <= 0) return;
     book.rendition.prev();
-    setCurrentPage(prev => prev - 1);
+    setCurrentPage((prev) => prev - 1);
   };
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-4">
-        <Button
-          variant="outline"
-          onClick={goToPrevPage}
-          disabled={currentPage <= 0}
-        >
-          <ChevronLeft className="h-4 w-4" />
-          Previous
-        </Button>
-        <span className="text-sm">
-          Page {currentPage + 1} of {totalPages}
-        </span>
-        <Button
-          variant="outline"
-          onClick={goToNextPage}
-          disabled={currentPage >= totalPages - 1}
-        >
-          Next
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
+      <ReaderToolbar bookTitle={url.split("/").pop() || "EPUB Book"}>
+        <EPubToolbar
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPrevPage={goToPrevPage}
+          onNextPage={goToNextPage}
+        />
+      </ReaderToolbar>
 
-      <div 
+      <div
         ref={viewerRef}
         className="w-full max-w-3xl border rounded-lg bg-white p-4"
       />
