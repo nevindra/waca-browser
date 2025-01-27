@@ -7,6 +7,7 @@ export interface PDFViewerProps {
   scale: number;
   highlights: SearchResult[];
   onDocumentLoad: (pdf: pdfjs.PDFDocumentProxy) => void;
+  onPageChange: (pageNumber: number) => void;
 }
 
 export const PDFViewer = ({
@@ -15,6 +16,7 @@ export const PDFViewer = ({
   scale,
   highlights,
   onDocumentLoad,
+  onPageChange,
 }: PDFViewerProps) => (
   <div className="mt-24 mb-4">
     <Document
@@ -22,6 +24,11 @@ export const PDFViewer = ({
       onLoadSuccess={onDocumentLoad}
       loading={<div>Loading PDF...</div>}
       error={<div>Failed to load PDF</div>}
+      onItemClick={({ pageNumber }) => {
+        if (pageNumber) {
+          onPageChange(pageNumber);
+        }
+      }}
     >
       <div className="relative">
         <Page pageNumber={pageNumber} scale={scale} className="shadow-lg" />

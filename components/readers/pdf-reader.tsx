@@ -212,6 +212,7 @@ export function PDFReader({ url, title }: PDFReaderProps) {
         scale={scale}
         highlights={highlights}
         onDocumentLoad={handleDocumentLoad}
+        onPageChange={setPageNumber}
       />
     </div>
   );
