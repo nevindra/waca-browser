@@ -1,101 +1,176 @@
+"use client";
+
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Upload, FileText, Book as BookIcon } from "lucide-react";
+import { uploadBook, getBooks, type Book } from "./actions";
+import { useRef, useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
+
+function formatFileSize(bytes: number): string {
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let size = bytes;
+  let unitIndex = 0;
+
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex++;
+  }
+
+  return `${size.toFixed(1)} ${units[unitIndex]}`;
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [isUploading, setIsUploading] = useState(false);
+  const [books, setBooks] = useState<Book[]>([]);
+  const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  async function loadBooks() {
+    const bookList = await getBooks();
+    setBooks(bookList);
+  }
+
+  useEffect(() => {
+    loadBooks();
+  }, []);
+
+  async function handleSubmit(formData: FormData) {
+    try {
+      setIsUploading(true);
+      const result = await uploadBook(formData);
+      
+      if (result?.error) {
+        toast({
+          variant: "destructive",
+          title: "Upload failed",
+          description: result.error,
+        });
+        return;
+      }
+
+      toast({
+        title: "Upload Successful",
+        description: "Book uploaded successfully",
+        variant: "success",
+      });
+      
+      // Reset the form and reload books
+      formRef.current?.reset();
+      loadBooks();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Upload failed",
+        description: "Something went wrong while uploading the book",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-background p-8 md:p-12 lg:p-16">
+      <Toaster />
+      <header className="mb-12">
+        <h1 className="text-4xl font-semibold mb-2">Your Library</h1>
+        <p className="text-muted-foreground">
+          Discover and manage your digital book collection
+        </p>
+      </header>
+
+      <div className="grid gap-8">
+        <div className="flex justify-between items-center">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-medium">Recent Books</h2>
+            <p className="text-sm text-muted-foreground">
+              Continue where you left off
+            </p>
+          </div>
+          <form
+            ref={formRef}
+            action={async (formData: FormData) => {
+              await handleSubmit(formData);
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+            <input
+              type="file"
+              name="file"
+              accept=".pdf,.epub"
+              className="hidden"
+              id="book-upload"
+              onChange={(e) => {
+                if (e.target.files?.length) {
+                  const form = e.target.form;
+                  if (form) {
+                    const formData = new FormData(form);
+                    form.requestSubmit();
+                  }
+                }
+              }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <Button asChild disabled={isUploading}>
+              <label htmlFor="book-upload" className="cursor-pointer">
+                <Upload className="h-5 w-5 mr-2" />
+                {isUploading ? "Uploading..." : "Upload Books"}
+              </label>
+            </Button>
+          </form>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {books.length === 0 ? (
+            <div className="col-span-full flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-lg border-muted">
+              <div className="mb-4 rounded-full bg-muted/10 p-3">
+                <Image
+                  src="/book-open.svg"
+                  alt="Book icon"
+                  width={24}
+                  height={24}
+                  className="opacity-75"
+                />
+              </div>
+              <h3 className="text-lg font-medium mb-2">No books yet</h3>
+              <p className="text-sm text-muted-foreground text-center mb-4">
+                Upload your first book to get started with your digital library
+              </p>
+              <label htmlFor="book-upload">
+                <Button variant="outline" asChild disabled={isUploading}>
+                  <span>Browse Files</span>
+                </Button>
+              </label>
+            </div>
+          ) : (
+            books.map((book) => (
+              <Link
+                key={book.path}
+                href={`/books/${encodeURIComponent(book.filename)}`}
+                className="group relative flex flex-col space-y-2 rounded-lg border p-6 hover:bg-accent transition-colors"
+              >
+                <div className="flex items-center space-x-4">
+                  {book.type === 'pdf' ? (
+                    <FileText className="h-10 w-10 text-red-500" />
+                  ) : (
+                    <BookIcon className="h-10 w-10 text-blue-500" />
+                  )}
+                  <div className="space-y-1">
+                    <h3 className="font-medium leading-none line-clamp-1">{book.filename}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {formatFileSize(book.size)}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Added {formatDistanceToNow(book.createdAt, { addSuffix: true })}
+                </div>
+              </Link>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }
