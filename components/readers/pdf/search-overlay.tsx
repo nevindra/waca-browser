@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowLeft, ArrowRight, Loader2, X } from "lucide-react";
 import { SearchResult } from "./types";
 import { useDebounce } from "@uidotdev/usehooks";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export interface SearchOverlayProps {
   isOpen: boolean;
@@ -28,10 +28,28 @@ export const SearchOverlay = ({
   onNavigate,
   onResultClick,
 }: SearchOverlayProps) => {
-  if (!isOpen) return null;
-
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
   const debouncedSearchQuery = useDebounce(localSearchQuery, 300);
+
+  useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setLocalSearchQuery("");
+      onSearch("");
+    }
+  }, [isOpen, onSearch]);
+
+  useEffect(() => {
+    if (!localSearchQuery) {
+      onSearch("");
+    }
+  }, [localSearchQuery, onSearch]);
 
   useEffect(() => {
     setLocalSearchQuery(searchQuery);
@@ -43,18 +61,23 @@ export const SearchOverlay = ({
     }
   }, [debouncedSearchQuery]);
 
+  if (!isOpen) return null;
+
   const renderSearchResult = (result: SearchResult, index: number) => {
-    const preText = result.text.substring(
-      0,
-      result.text.indexOf(localSearchQuery)
-    );
-    const matchText = result.text.substring(
-      result.text.indexOf(localSearchQuery),
-      result.text.indexOf(localSearchQuery) + localSearchQuery.length
-    );
-    const postText = result.text.substring(
-      result.text.indexOf(localSearchQuery) + localSearchQuery.length
-    );
+    // Find all occurrences of the search query in the text
+    const matches = [
+      ...result.text.matchAll(new RegExp(localSearchQuery, "gi")),
+    ];
+    if (matches.length === 0) return null;
+
+    // Use the first match for highlighting
+    const match = matches[0];
+    const startIndex = match.index!;
+    const endIndex = startIndex + match[0].length;
+
+    const preText = result.text.substring(0, startIndex);
+    const matchText = result.text.substring(startIndex, endIndex);
+    const postText = result.text.substring(endIndex);
 
     return (
       <div
@@ -84,10 +107,19 @@ export const SearchOverlay = ({
             type="text"
             placeholder="Search in document..."
             value={localSearchQuery}
+            ref={searchInputRef}
             onChange={(e) => setLocalSearchQuery(e.target.value)}
             className="flex-1"
           />
-          <Button variant="ghost" size="icon" onClick={onClose}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              setLocalSearchQuery("");
+              onSearch("");
+              onClose();
+            }}
+          >
             <X className="h-4 w-4" />
           </Button>
         </div>

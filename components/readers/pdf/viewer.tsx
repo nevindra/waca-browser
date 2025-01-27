@@ -28,13 +28,15 @@ export const PDFViewer = ({
         {highlights.map((highlight, index) => (
           <div
             key={`${pageNumber}-${highlight.pageIndex}-${highlight.startIndex}-${highlight.endIndex}-${highlight.position?.left}-${highlight.position?.top}-${index}`}
-            className="absolute bg-yellow-200/50 pointer-events-none"
+            className="absolute bg-yellow-300 mix-blend-multiply pointer-events-none"
             style={{
-              left: `${highlight.position?.left * scale}px`,
-              top: `${highlight.position?.top * scale}px`,
-              width: `${highlight.position?.width * scale}px`,
-              height: `${(highlight.position?.height || 12) * scale}px`,
-              opacity: 0.5,
+              left: `${(highlight.position?.left || 0) * scale}px`,
+              top: `${(highlight.position?.top || 0) * scale}px`,
+              width: `${(highlight.position?.width || 0) * scale}px`,
+              height: `${(highlight.position?.height || 0) * scale}px`,
+              transform: `scale(${scale})`,
+              transformOrigin: "top left",
+              borderRadius: "2px",
             }}
           />
         ))}
