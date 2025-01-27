@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Upload, FileText, Book as BookIcon } from "lucide-react";
+import { Upload } from "lucide-react";
+import { BookCover } from "@/components/book-cover";
 import { uploadBook, getBooks, type Book } from "./actions";
 import { useRef, useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -179,13 +180,13 @@ export default function Home() {
                   href={`/books/${encodeURIComponent(book.filename)}`}
                   className="group relative flex flex-col space-y-2 rounded-lg border p-4 md:p-6 hover:bg-accent transition-colors"
                 >
-                  <div className="flex items-center space-x-4">
-                    {book.type === "pdf" ? (
-                      <FileText className="h-8 w-8 md:h-10 md:w-10 text-red-500" />
-                    ) : (
-                      <BookIcon className="h-8 w-8 md:h-10 md:w-10 text-blue-500" />
-                    )}
-                    <div className="space-y-1 min-w-0 flex-1">
+                  <div className="flex flex-col space-y-4">
+                    <BookCover
+                      type={book.type}
+                      url={`/api/uploads/${book.filename}`}
+                      className="w-full aspect-[3/4]"
+                    />
+                    <div className="space-y-1">
                       <h3 className="font-medium leading-none line-clamp-1">
                         {book.filename}
                       </h3>

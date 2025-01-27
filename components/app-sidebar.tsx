@@ -42,7 +42,7 @@ const data = {
       items: [
         {
           title: "All",
-          url: "#",
+          url: "/",
         },
         {
           title: "Starred",
