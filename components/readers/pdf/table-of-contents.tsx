@@ -76,7 +76,7 @@ export const TableOfContents = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed top-12 left-4 z-20 w-72 bg-white rounded-lg shadow-lg border overflow-hidden">
+    <div className="fixed top-12 right-4 z-20 w-72 bg-white rounded-lg shadow-lg border overflow-hidden">
       <div className="p-3 border-b flex items-center justify-between">
         <h2 className="font-medium">Table of Contents</h2>
         <Button variant="ghost" size="icon" onClick={onClose}>

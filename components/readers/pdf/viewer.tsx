@@ -18,7 +18,7 @@ export const PDFViewer = ({
   onDocumentLoad,
   onPageChange,
 }: PDFViewerProps) => (
-  <div className="mt-24 mb-4">
+  <div className="mt-24 mb-4 w-full flex justify-center">
     <Document
       file={url}
       onLoadSuccess={onDocumentLoad}
@@ -30,8 +30,8 @@ export const PDFViewer = ({
         }
       }}
     >
-      <div className="relative">
-        <Page pageNumber={pageNumber} scale={scale} className="shadow-lg" />
+      <div className="relative w-full max-w-[1200px]">
+        <Page pageNumber={pageNumber} scale={scale} className="shadow-lg w-full" width={1200} />
         {highlights.map((highlight, index) => (
           <div
             key={`${pageNumber}-${highlight.pageIndex}-${highlight.startIndex}-${highlight.endIndex}-${highlight.position?.left}-${highlight.position?.top}-${index}`}

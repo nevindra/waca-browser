@@ -42,8 +42,11 @@ export const findTextPositionsInPage = async (
       );
       const height = item.height || fontSize;
 
-      // Adjust the vertical position slightly upward
-      const adjustedY = viewportY - height;
+      // Adjust the vertical position and scale coordinates to match container width
+      const containerWidth = 1200;
+      const scaleFactor = containerWidth / viewport.width;
+      const adjustedX = viewportX * scaleFactor;
+      const adjustedY = viewportY * scaleFactor - height * 2.2;
 
       positions.push({
         pageIndex: page.pageNumber,
@@ -51,10 +54,10 @@ export const findTextPositionsInPage = async (
         startIndex,
         endIndex: startIndex + searchText.length,
         position: {
-          left: viewportX,
+          left: adjustedX,
           top: adjustedY,
-          width: matchWidth,
-          height: height,
+          width: matchWidth * scaleFactor,
+          height: height * scaleFactor,
         },
       });
     }
