@@ -1,6 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export interface ReaderToolbarProps {
   bookTitle: string;
@@ -8,19 +15,23 @@ export interface ReaderToolbarProps {
 }
 
 export const ReaderToolbar = ({ bookTitle, children }: ReaderToolbarProps) => (
-  <div className="fixed top-0 left-0 right-0 z-10 bg-white/80 backdrop-blur-sm border-b py-3 mb-16">
-    <div className="flex items-center justify-between px-4 py-2">
-      <div className="flex items-center gap-4">
-        <Link href="/">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
-        <h1 className="text-md font-medium truncate max-w-[50vw]">
-          {bookTitle}
-        </h1>
-      </div>
-
+  <div className="sticky top-3 z-10 bg-white/80 backdrop-blur-sm border-b shadow-lg rounded-lg">
+    <div className="flex h-14 shrink-0 items-center gap-2 px-4">
+      <SidebarTrigger className="-ml-1" />
+      <Separator orientation="vertical" className="mr-2 h-4" />
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem className="hidden md:block">
+            <BreadcrumbLink href="/">Library</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator className="hidden md:block" />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{bookTitle}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <Separator orientation="vertical" className="mr-2 h-4" />
+      <div className="flex-1" />
       <div className="flex items-center gap-4">{children}</div>
     </div>
   </div>

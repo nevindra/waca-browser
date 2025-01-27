@@ -32,7 +32,6 @@ export function PDFReader({ url, title }: PDFReaderProps) {
   const [scale, setScale] = useState(1);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [infiniteScroll, setInfiniteScroll] = useState(true);
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [currentSearchIndex, setCurrentSearchIndex] = useState(-1);
@@ -168,24 +167,6 @@ export function PDFReader({ url, title }: PDFReaderProps) {
     updateHighlights();
   }, [pageNumber, searchResults, currentSearchIndex, searchQuery]);
 
-  // Handle keyboard navigation
-  const pdfContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft" && pageNumber > 1) {
-        setPageNumber(pageNumber - 1);
-        pdfContainerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-      } else if (e.key === "ArrowRight" && pageNumber < (numPages || 1)) {
-        setPageNumber(pageNumber + 1);
-        pdfContainerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [pageNumber, numPages]);
-
   return (
     <div className="relative flex flex-col items-center min-h-screen bg-gray-50">
       <ReaderToolbar bookTitle={title}>
@@ -197,8 +178,6 @@ export function PDFReader({ url, title }: PDFReaderProps) {
           onScaleChange={setScale}
           onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}
           onToggleToc={() => setIsTocOpen(!isTocOpen)}
-          infiniteScroll={infiniteScroll}
-          onInfiniteScrollChange={setInfiniteScroll}
         />
       </ReaderToolbar>
 
@@ -234,7 +213,6 @@ export function PDFReader({ url, title }: PDFReaderProps) {
         highlights={highlights}
         onDocumentLoad={handleDocumentLoad}
         onPageChange={setPageNumber}
-        infiniteScroll={infiniteScroll}
       />
     </div>
   );

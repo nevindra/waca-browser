@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Search, List, ZoomIn, ZoomOut } from "lucide-react";
-import { ScrollText, ArrowLeftRight } from "lucide-react";
+
 interface PDFToolbarProps {
   currentPage: number;
   totalPages?: number;
@@ -9,8 +9,6 @@ interface PDFToolbarProps {
   onScaleChange: (scale: number) => void;
   onToggleSearch: () => void;
   onToggleToc: () => void;
-  infiniteScroll?: boolean;
-  onInfiniteScrollChange?: (enabled: boolean) => void;
 }
 
 export const PDFToolbar = ({
@@ -21,8 +19,6 @@ export const PDFToolbar = ({
   onScaleChange,
   onToggleSearch,
   onToggleToc,
-  infiniteScroll = true,
-  onInfiniteScrollChange,
 }: PDFToolbarProps) => {
   const handlePageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const page = parseInt(e.target.value);
@@ -68,22 +64,6 @@ export const PDFToolbar = ({
       </div>
 
       <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => onInfiniteScrollChange?.(!infiniteScroll)}
-          title={
-            infiniteScroll
-              ? "Switch to page-by-page"
-              : "Switch to infinite scroll"
-          }
-        >
-          {infiniteScroll ? (
-            <ScrollText className="h-4 w-4" />
-          ) : (
-            <ArrowLeftRight className="h-4 w-4" />
-          )}
-        </Button>
         <Button variant="ghost" size="icon" onClick={onToggleSearch}>
           <Search className="h-4 w-4" />
         </Button>
