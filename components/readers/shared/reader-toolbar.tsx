@@ -36,7 +36,7 @@ export const ReaderToolbar = ({
   <div className="fixed top-0 left-0 right-0 z-10 bg-white/80 backdrop-blur-sm border-b py-3">
     <div className="flex items-center justify-between px-4 py-2">
       <div className="flex items-center gap-4">
-        <Link href="/library">
+        <Link href="/">
           <Button variant="ghost" size="icon">
             <ArrowLeft className="h-4 w-4" />
           </Button>
