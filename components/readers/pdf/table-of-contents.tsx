@@ -5,6 +5,7 @@ import { useState } from "react";
 export interface TOCItem {
   title: string;
   pageNumber: number;
+  href: string;
   children?: TOCItem[];
 }
 
@@ -12,7 +13,7 @@ export interface TableOfContentsProps {
   isOpen: boolean;
   items: TOCItem[];
   onClose: () => void;
-  onItemClick: (pageNumber: number) => void;
+  onItemClick: (pageNumber: number, href: string) => void;
 }
 
 const TOCItemComponent = ({
@@ -21,7 +22,7 @@ const TOCItemComponent = ({
   level = 0,
 }: {
   item: TOCItem;
-  onItemClick: (pageNumber: number) => void;
+  onItemClick: (pageNumber: number, href: string) => void;
   level?: number;
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -31,7 +32,7 @@ const TOCItemComponent = ({
     <div className="w-full">
       <button
         onClick={() => {
-          onItemClick(item.pageNumber);
+          onItemClick(item.pageNumber, item.href);
           if (hasChildren) setIsExpanded(!isExpanded);
         }}
         className={`w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-sm ${

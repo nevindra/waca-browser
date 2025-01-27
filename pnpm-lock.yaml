@@ -45,8 +45,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       epubjs:
-        specifier: ^0.3.93
-        version: 0.3.93
+        specifier: 0.3.88
+        version: 0.3.88
       lucide-react:
         specifier: ^0.474.0
         version: 0.474.0(react@19.0.0)
@@ -65,6 +65,9 @@ importers:
       react-pdf:
         specifier: ^9.2.1
         version: 9.2.1(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-reader:
+        specifier: ^2.0.12
+        version: 2.0.12(react@19.0.0)
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0
@@ -870,6 +873,9 @@ packages:
   end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
 
+  epubjs@0.3.88:
+    resolution: {integrity: sha512-VRumULpUELYmYwzypyfbDwoSIqDp2LXOXCtY3o55o3YDW5Zm32UjtZuX/xaWFGqyZORNNMWWQ8VlMaY1djnDYg==}
+
   epubjs@0.3.93:
     resolution: {integrity: sha512-c06pNSdBxcXv3dZSbXAVLE1/pmleRhOT6mXNZo6INKmvuKpYB65MwU/lO7830czCtjIiK9i+KR+3S+p0wtljrw==}
 
@@ -1257,6 +1263,9 @@ packages:
       '@types/react':
         optional: true
 
+  react-reader@2.0.12:
+    resolution: {integrity: sha512-yO1o/l4Qh6XyYs6NVjNQBJqEIdWpTMZg9KubKgH2Ik5s7nRu/YMXAcEd8ZM1XPG+aWochZdgdEPPqQ8Sglj2IA==}
+
   react-remove-scroll-bar@2.3.8:
     resolution: {integrity: sha512-9r+yi9+mgU33AKcj6IbT9oRCO78WriSj6t/cF8DWBZJ9aOGPOTEDvdUDz1FwKim7QXWwmHqtdHnRJfhAxEG46Q==}
     engines: {node: '>=10'}
@@ -1286,6 +1295,11 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  react-swipeable@7.0.2:
+    resolution: {integrity: sha512-v1Qx1l+aC2fdxKa9aKJiaU/ZxmJ5o98RMoFwUqAAzVWUcxgfHFXDDruCKXhw6zIYXm6V64JiHgP9f6mlME5l8w==}
+    peerDependencies:
+      react: ^16.8.3 || ^17 || ^18 || ^19.0.0 || ^19.0.0-rc
 
   react@19.0.0:
     resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
@@ -1510,6 +1524,11 @@ packages:
 
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+
+  xmldom@0.3.0:
+    resolution: {integrity: sha512-z9s6k3wxE+aZHgXYxSTpGDo7BYOUfJsIRyoZiX6HTjwpwfS2wpQBQKa2fD+ShLyPkqDYo5ud7KitmLZ2Cd6r0g==}
+    engines: {node: '>=10.0.0'}
+    deprecated: Deprecated due to CVE-2021-21366 resolved in 0.5.0
 
   yaml@2.7.0:
     resolution: {integrity: sha512-+hSoy/QHluxmC9kCIJyL/uyFmLmc+e5CFR5Wa+bpIhIj85LVb9ZH2nVnqrHoSvKogwODv0ClqZkmiSSaIH5LTA==}
@@ -2220,6 +2239,18 @@ snapshots:
       once: 1.4.0
     optional: true
 
+  epubjs@0.3.88:
+    dependencies:
+      '@types/localforage': 0.0.34
+      core-js: 3.40.0
+      event-emitter: 0.3.5
+      jszip: 3.10.1
+      localforage: 1.10.0
+      lodash: 4.17.21
+      marks-pane: 1.0.9
+      path-webpack: 0.0.3
+      xmldom: 0.3.0
+
   epubjs@0.3.93:
     dependencies:
       '@types/localforage': 0.0.34
@@ -2621,6 +2652,13 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.0.8
 
+  react-reader@2.0.12(react@19.0.0):
+    dependencies:
+      epubjs: 0.3.93
+      react-swipeable: 7.0.2(react@19.0.0)
+    transitivePeerDependencies:
+      - react
+
   react-remove-scroll-bar@2.3.8(@types/react@19.0.8)(react@19.0.0):
     dependencies:
       react: 19.0.0
@@ -2647,6 +2685,10 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.8
+
+  react-swipeable@7.0.2(react@19.0.0):
+    dependencies:
+      react: 19.0.0
 
   react@19.0.0: {}
 
@@ -2920,5 +2962,7 @@ snapshots:
 
   wrappy@1.0.2:
     optional: true
+
+  xmldom@0.3.0: {}
 
   yaml@2.7.0: {}

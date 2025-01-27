@@ -2,7 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import { PDFReader } from "@/components/readers/pdf-reader";
-import { EPubReader } from "@/components/readers/epub-reader";
+import { EPubReader } from "@/lib/epub/view";
 
 interface BookPageProps {
   params: Promise<{
@@ -32,15 +32,13 @@ export default function BookPage({ params }: BookPageProps) {
   if (!book) return null;
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-muted/50 rounded-lg p-6">
-          {book.type === "pdf" ? (
-            <PDFReader url={book.url} title={book.title} />
-          ) : (
-            <EPubReader url={book.url} />
-          )}
-        </div>
+    <div className="min-h-screen bg-background">
+      <div className="h-screen">
+        {book.type === "pdf" ? (
+          <PDFReader url={book.url} title={book.title} />
+        ) : (
+          <EPubReader url={book.url} title={book.title} />
+        )}
       </div>
     </div>
   );
