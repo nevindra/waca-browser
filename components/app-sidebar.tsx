@@ -128,7 +128,16 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -160,8 +169,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <div className="flex items-center justify-between w-full px-2 py-1.5">
               <span className="text-sm">Dark mode</span>
               <Switch
-                suppressHydrationWarning
-                checked={theme === "dark"}
+                checked={resolvedTheme === "dark"}
                 onCheckedChange={(checked) =>
                   setTheme(checked ? "dark" : "light")
                 }

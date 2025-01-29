@@ -48,7 +48,7 @@ export const PDFViewer = ({
   }, [onTextSelect]);
 
   return (
-    <div className="mt-4 mb-4 w-full flex justify-center">
+    <div className="mt-4 mb-4 w-full flex justify-center bg-background">
       <div className="w-full max-w-[1200px]">
         <Document
           file={url}

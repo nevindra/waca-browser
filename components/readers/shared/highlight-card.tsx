@@ -28,8 +28,8 @@ export function HighlightCard({
       <CardContent className="p-6 space-y-4">
         <div className="flex justify-between items-start">
           <div className="space-y-2">
-            <div className="text-xs text-gray-500">{pageInfo}</div>
-            <p className="text-base leading-relaxed text-gray-700">{text}</p>
+            <div className="text-xs text-muted-foreground">{pageInfo}</div>
+            <p className="text-base leading-relaxed text-foreground">{text}</p>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -60,14 +60,14 @@ export function HighlightCard({
         </div>
         <div className="flex items-center gap-4">
           <Button
-            className="bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground transition-colors duration-200"
             size="sm"
           >
             <Sparkles className="h-4 w-4 mr-2" /> Explain with AI
           </Button>
           {onGoToHighlight && (
             <Button
-              className="border border-gray-200 hover:bg-gray-50 text-gray-700 transition-colors duration-200"
+              className="border border-input hover:bg-accent text-foreground transition-colors duration-200"
               variant="outline"
               size="sm"
               onClick={onGoToHighlight}

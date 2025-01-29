@@ -15,7 +15,7 @@ export interface ReaderToolbarProps {
 }
 
 export const ReaderToolbar = ({ bookTitle, children }: ReaderToolbarProps) => (
-  <div className="sticky top-3 z-10 bg-white/80 backdrop-blur-sm border-b shadow-lg rounded-lg">
+  <div className="sticky top-3 q z-10 bg-background/80 backdrop-blur-sm border shadow-lg rounded-lg">
     <div className="flex h-14 shrink-0 items-center gap-2 px-4">
       <SidebarTrigger className="-ml-1" />
       <Separator orientation="vertical" className="mr-2 h-4" />

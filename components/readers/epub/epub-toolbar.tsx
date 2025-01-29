@@ -38,7 +38,7 @@ export const EPubToolbar = ({
         },
         "hl",
         {
-          fill: "rgb(255, 255, 0)",
+          fill: "hsl(var(--warning))",
           "fill-opacity": "0.3",
           "mix-blend-mode": "multiply",
         }
@@ -56,13 +56,14 @@ export const EPubToolbar = ({
 
   return (
     <>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 text-foreground">
         <Button
           variant="ghost"
           size="icon"
           onClick={handleAnnotate}
           disabled={!currentSelection}
           title="Highlight selected text"
+          className="hover:bg-accent"
         >
           <Highlighter className="h-4 w-4" />
         </Button>

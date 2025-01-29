@@ -40,9 +40,11 @@ export const PDFToolbar = ({
           max={totalPages}
           value={currentPage}
           onChange={handlePageChange}
-          className="w-16 h-8 px-2 border rounded text-sm"
+          className="w-16 h-8 px-2 border rounded text-sm bg-background"
         />
-        <span className="text-sm text-gray-500">of {totalPages || "?"}</span>
+        <span className="text-sm text-muted-foreground">
+          of {totalPages || "?"}
+        </span>
       </div>
 
       <div className="flex items-center gap-2">
