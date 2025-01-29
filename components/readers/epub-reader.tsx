@@ -14,8 +14,8 @@ function updateTheme(rendition: Rendition, theme: ITheme) {
   const themes = rendition.themes;
   themes.default({
     body: {
-      color: theme === "dark" ? "#cdd6f4" : "#4c4f69",
-      background: theme === "dark" ? "#1e1e2e" : "#eff1f5",
+      color: theme === "dark" ? "#cdd6f4" : "#4c4f69", // Text color
+      background: theme === "dark" ? "#1e1e2e" : "#eff1f5", // Background color
     },
     "::selection": {
       background: theme === "dark" ? "#89b4fa80" : "#7287fd80",

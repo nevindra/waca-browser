@@ -170,7 +170,7 @@ export function PDFReader({ url, title }: PDFReaderProps) {
   }, [pageNumber, searchResults, currentSearchIndex, searchQuery]);
 
   return (
-    <div className="relative flex flex-col items-center min-h-screen bg-gray-50">
+    <div className="relative flex flex-col h-screen bg-transparent">
       <ReaderToolbar bookTitle={title}>
         <PDFToolbar
           currentPage={pageNumber}

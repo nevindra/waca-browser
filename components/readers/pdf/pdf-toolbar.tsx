@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Search, List, ZoomIn, ZoomOut, Highlighter } from "lucide-react";
 
 interface PDFToolbarProps {
@@ -32,9 +33,9 @@ export const PDFToolbar = ({
   };
 
   return (
-    <>
+    <div className="flex items-center gap-4 text-foreground">
       <div className="flex items-center gap-2">
-        <input
+        <Input
           type="number"
           min={1}
           max={totalPages}
@@ -53,8 +54,9 @@ export const PDFToolbar = ({
           size="icon"
           onClick={() => onScaleChange(scale - 0.1)}
           disabled={scale <= 0.5}
+          className="hover:bg-accent"
         >
-          <ZoomOut className="h-4 w-4" />
+          <ZoomOut className="h-5 w-5" />
         </Button>
         <span className="text-sm w-16 text-center">
           {Math.round(scale * 100)}%
@@ -64,17 +66,28 @@ export const PDFToolbar = ({
           size="icon"
           onClick={() => onScaleChange(scale + 0.1)}
           disabled={scale >= 2}
+          className="hover:bg-accent"
         >
-          <ZoomIn className="h-4 w-4" />
+          <ZoomIn className="h-5 w-5" />
         </Button>
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" onClick={onToggleSearch}>
-          <Search className="h-4 w-4" />
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onToggleSearch}
+          className="hover:bg-accent"
+        >
+          <Search className="h-5 w-5" />
         </Button>
-        <Button variant="ghost" size="icon" onClick={onToggleToc}>
-          <List className="h-4 w-4" />
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onToggleToc}
+          className="hover:bg-accent"
+        >
+          <List className="h-5 w-5" />
         </Button>
         <Button
           variant="ghost"
@@ -82,10 +95,11 @@ export const PDFToolbar = ({
           onClick={onHighlight}
           disabled={!selectedText}
           title="Highlight selected text"
+          className="hover:bg-accent"
         >
-          <Highlighter className="h-4 w-4" />
+          <Highlighter className="h-5 w-5" />
         </Button>
       </div>
-    </>
+    </div>
   );
 };

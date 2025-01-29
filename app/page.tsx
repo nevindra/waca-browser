@@ -86,7 +86,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col">
-      <header className="flex h-14 shrink-0 items-center gap-2 px-4">
+      <header className="flex h-14 bg-white rounded-lg shrink-0 items-center gap-2 px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
         <Breadcrumb>
@@ -101,7 +101,7 @@ export default function Home() {
           </BreadcrumbList>
         </Breadcrumb>
       </header>
-      <div className="flex-1 bg-background px-6 pt-2 pb-4 md:px-8 md:pt-3 md:pb-6 lg:px-12 lg:pt-4 lg:pb-8">
+      <div className="flex-1 bg-white px-6 pt-2 pb-4 md:px-8 md:pt-3 md:pb-6 lg:px-12 lg:pt-4 lg:pb-8">
         <header className="mb-6 md:mb-8">
           <h1 className="text-3xl md:text-4xl font-semibold mb-2">
             Your Library
@@ -111,7 +111,7 @@ export default function Home() {
           </p>
         </header>
 
-        <div className="grid gap-6 md:gap-8">
+        <div className="grid gap-6 md:gap-8 rounded-lg">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="space-y-1">
               <h2 className="text-xl md:text-2xl font-medium">Recent Books</h2>

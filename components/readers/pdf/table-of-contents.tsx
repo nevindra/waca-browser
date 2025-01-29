@@ -35,13 +35,13 @@ const TOCItemComponent = ({
           onItemClick(item.pageNumber, item.href);
           if (hasChildren) setIsExpanded(!isExpanded);
         }}
-        className={`w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-sm ${
+        className={`w-full text-left px-4 py-2 hover:bg-accent flex items-center gap-2 text-sm ${
           level === 0 ? "font-medium" : ""
         }`}
         style={{ paddingLeft: `${level * 12 + 16}px` }}
       >
         {hasChildren && (
-          <span className="text-gray-400">
+          <span className="text-muted-foreground">
             {isExpanded ? (
               <ChevronDown className="h-4 w-4" />
             ) : (
@@ -49,8 +49,8 @@ const TOCItemComponent = ({
             )}
           </span>
         )}
-        <span className="flex-1 truncate">{item.title}</span>
-        <span className="text-gray-400 text-xs">{item.pageNumber}</span>
+        <span className="flex-1 truncate text-foreground">{item.title}</span>
+        <span className="text-muted-foreground text-xs">{item.pageNumber}</span>
       </button>
       {hasChildren && isExpanded && (
         <div>
@@ -77,14 +77,14 @@ export const TableOfContents = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed top-12 right-4 z-20 w-72 bg-white rounded-lg shadow-lg border overflow-hidden">
-      <div className="p-3 border-b flex items-center justify-between">
-        <h2 className="font-medium">Table of Contents</h2>
+    <div className="fixed top-12 right-4 z-20 w-72 bg-background rounded-lg shadow-lg border border-border overflow-hidden">
+      <div className="p-3 border-b border-border flex items-center justify-between">
+        <h2 className="font-medium text-foreground">Table of Contents</h2>
         <Button variant="ghost" size="icon" onClick={onClose}>
           <ChevronLeft className="h-4 w-4" />
         </Button>
       </div>
-      <div className="max-h-[calc(100vh-12rem)] overflow-y-auto divide-y">
+      <div className="max-h-[calc(100vh-12rem)] overflow-y-auto divide-y divide-border">
         {items.map((item, index) => (
           <TOCItemComponent
             key={`${item.title}-${index}`}
