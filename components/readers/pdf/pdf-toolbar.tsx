@@ -1,24 +1,28 @@
 import { Button } from "@/components/ui/button";
-import { Search, List, ZoomIn, ZoomOut } from "lucide-react";
+import { Search, List, ZoomIn, ZoomOut, Highlighter } from "lucide-react";
 
 interface PDFToolbarProps {
   currentPage: number;
   totalPages?: number;
   scale: number;
+  selectedText: string | null;
   onPageChange: (page: number) => void;
   onScaleChange: (scale: number) => void;
   onToggleSearch: () => void;
   onToggleToc: () => void;
+  onHighlight: () => void;
 }
 
 export const PDFToolbar = ({
   currentPage,
   totalPages,
   scale,
+  selectedText,
   onPageChange,
   onScaleChange,
   onToggleSearch,
   onToggleToc,
+  onHighlight,
 }: PDFToolbarProps) => {
   const handlePageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const page = parseInt(e.target.value);
@@ -69,6 +73,15 @@ export const PDFToolbar = ({
         </Button>
         <Button variant="ghost" size="icon" onClick={onToggleToc}>
           <List className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onHighlight}
+          disabled={!selectedText}
+          title="Highlight selected text"
+        >
+          <Highlighter className="h-4 w-4" />
         </Button>
       </div>
     </>

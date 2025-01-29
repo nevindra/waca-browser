@@ -12,6 +12,7 @@ import { SearchResult } from "./pdf/types";
 import { searchInDocument } from "./pdf/utils";
 import { TableOfContents } from "./pdf/table-of-contents";
 import { PDFToolbar } from "./pdf/pdf-toolbar";
+import { HighlightSheet } from "./pdf/highlight-sheet";
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
 
@@ -37,6 +38,7 @@ export function PDFReader({ url, title }: PDFReaderProps) {
   const [currentSearchIndex, setCurrentSearchIndex] = useState(-1);
   const [isSearching, setIsSearching] = useState(false);
   const [highlights, setHighlights] = useState<SearchResult[]>([]);
+  const [selectedText, setSelectedText] = useState<string | null>(null);
   const pdfDocumentRef = useRef<pdfjs.PDFDocumentProxy | null>(null);
 
   // Update highlights when page changes or search results change
@@ -174,10 +176,33 @@ export function PDFReader({ url, title }: PDFReaderProps) {
           currentPage={pageNumber}
           totalPages={numPages}
           scale={scale}
+          selectedText={selectedText}
           onPageChange={setPageNumber}
           onScaleChange={setScale}
           onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}
           onToggleToc={() => setIsTocOpen(!isTocOpen)}
+          onHighlight={() => {
+            if (selectedText) {
+              // Save the highlighted text
+              setHighlights([
+                ...highlights,
+                {
+                  text: selectedText,
+                  pageIndex: pageNumber,
+                  startIndex: 0,
+                  endIndex: selectedText.length,
+                  position: null,
+                },
+              ]);
+              setSelectedText(null);
+            }
+          }}
+        />
+        <HighlightSheet
+          highlights={highlights}
+          onRemoveHighlight={(index) => {
+            setHighlights(highlights.filter((_, i) => i !== index));
+          }}
         />
       </ReaderToolbar>
 
@@ -213,6 +238,7 @@ export function PDFReader({ url, title }: PDFReaderProps) {
         highlights={highlights}
         onDocumentLoad={handleDocumentLoad}
         onPageChange={setPageNumber}
+        onTextSelect={setSelectedText}
       />
     </div>
   );

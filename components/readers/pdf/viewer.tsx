@@ -9,6 +9,7 @@ export interface PDFViewerProps {
   highlights: SearchResult[];
   onDocumentLoad: (pdf: pdfjs.PDFDocumentProxy) => void;
   onPageChange: (pageNumber: number) => void;
+  onTextSelect?: (text: string | null) => void;
 }
 
 export const PDFViewer = ({
@@ -18,6 +19,7 @@ export const PDFViewer = ({
   highlights,
   onDocumentLoad,
   onPageChange,
+  onTextSelect,
 }: PDFViewerProps) => {
   const [numPages, setNumPages] = useState<number>(0);
 
@@ -33,6 +35,17 @@ export const PDFViewer = ({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [pageNumber, numPages, onPageChange]);
+
+  useEffect(() => {
+    const handleMouseUp = () => {
+      const selection = window.getSelection();
+      const selectedText = selection?.toString() || null;
+      onTextSelect?.(selectedText);
+    };
+
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => window.removeEventListener("mouseup", handleMouseUp);
+  }, [onTextSelect]);
 
   return (
     <div className="mt-4 mb-4 w-full flex justify-center">
