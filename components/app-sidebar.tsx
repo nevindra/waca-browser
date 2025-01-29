@@ -26,6 +26,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Switch } from "@/components/ui/switch";
+import { useTheme } from "next-themes";
 
 const data = {
   user: {
@@ -126,6 +128,8 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { theme, setTheme } = useTheme();
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -151,6 +155,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
+        <SidebarMenu className="mb-2">
+          <SidebarMenuItem>
+            <div className="flex items-center justify-between w-full px-2 py-1.5">
+              <span className="text-sm">Dark mode</span>
+              <Switch
+                suppressHydrationWarning
+                checked={theme === "dark"}
+                onCheckedChange={(checked) =>
+                  setTheme(checked ? "dark" : "light")
+                }
+              />
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>

@@ -1,34 +1,79 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Highlighter } from "lucide-react";
+import type { Rendition } from "epubjs";
+import { HighlightSheet } from "./highlight-sheet";
+
+interface TextSelection {
+  text: string;
+  cfiRange: string;
+}
 
 interface EPubToolbarProps {
-  currentPage: number;
-  totalPages: number;
-  onPrevPage: () => void;
-  onNextPage: () => void;
+  currentSelection: TextSelection | null;
+  selections: TextSelection[];
+  rendition?: Rendition;
 }
 
 export const EPubToolbar = ({
-  currentPage,
-  totalPages,
-  onPrevPage,
-  onNextPage,
-}: EPubToolbarProps) => (
-  <div className="flex items-center gap-4">
-    <Button variant="ghost" onClick={onPrevPage} disabled={currentPage <= 0}>
-      <ChevronLeft className="h-4 w-4 mr-2" />
-      Previous
-    </Button>
-    <span className="text-sm">
-      Page {currentPage + 1} of {totalPages}
-    </span>
-    <Button
-      variant="ghost"
-      onClick={onNextPage}
-      disabled={currentPage >= totalPages - 1}
-    >
-      Next
-      <ChevronRight className="h-4 w-4 ml-2" />
-    </Button>
-  </div>
-);
+  currentSelection,
+  rendition,
+}: EPubToolbarProps) => {
+  const [isHighlightOpen, setIsHighlightOpen] = useState(false);
+  const [highlights, setHighlights] = useState<TextSelection[]>([]);
+
+  const handleAnnotate = () => {
+    if (currentSelection && rendition) {
+      const { cfiRange, text } = currentSelection;
+      console.log("Annotating:", { cfiRange, text });
+      setHighlights([...highlights, currentSelection]);
+      rendition.annotations.add(
+        "highlight",
+        cfiRange,
+        {},
+        (e: MouseEvent) => {
+          console.log("Highlight clicked:", { cfiRange, event: e });
+        },
+        "hl",
+        {
+          fill: "rgb(255, 255, 0)",
+          "fill-opacity": "0.3",
+          "mix-blend-mode": "multiply",
+        }
+      );
+
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+    }
+  };
+
+  const removeHighlight = (cfiRange: string) => {
+    rendition?.annotations.remove(cfiRange, "highlight");
+    setHighlights(highlights.filter((h) => h.cfiRange !== cfiRange));
+  };
+
+  return (
+    <>
+      <div className="flex items-center gap-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleAnnotate}
+          disabled={!currentSelection}
+          title="Highlight selected text"
+        >
+          <Highlighter className="h-4 w-4" />
+        </Button>
+        <HighlightSheet
+          isOpen={isHighlightOpen}
+          onOpenChange={setIsHighlightOpen}
+          highlights={highlights}
+          rendition={rendition}
+          onRemoveHighlight={removeHighlight}
+        />
+      </div>
+    </>
+  );
+};
