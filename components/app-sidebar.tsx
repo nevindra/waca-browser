@@ -10,7 +10,6 @@ import {
   Notebook,
   PieChart,
   Send,
-  Settings2,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -29,107 +28,84 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "next-themes";
 
-const data = {
-  user: {
-    name: "Nevindra",
-    email: "nevndra@example.com",
-    // avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Library",
-      url: "#",
-      icon: Book,
-      isActive: true,
-      items: [
-        {
-          title: "All",
-          url: "/",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Finished",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Notes",
-      url: "#",
-      icon: Notebook,
-      items: [
-        {
-          title: "All",
-          url: "#",
-        },
-        {
-          title: "Explore",
-          url: "#",
-        },
-      ],
-    },
-
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-};
+import { useSession } from "@/hooks/use-session";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
+  const user = useSession() || {
+    name: "Guest",
+    email: "",
+  };
+
+  const data = {
+    navMain: [
+      {
+        title: "Library",
+        url: "#",
+        icon: Book,
+        isActive: true,
+        items: [
+          {
+            title: "All",
+            url: "/",
+          },
+          {
+            title: "Starred",
+            url: "#",
+          },
+          {
+            title: "Finished",
+            url: "#",
+          },
+        ],
+      },
+      {
+        title: "Notes",
+        url: "#",
+        icon: Notebook,
+        items: [
+          {
+            title: "All",
+            url: "#",
+          },
+          {
+            title: "Explore",
+            url: "#",
+          },
+        ],
+      },
+    ],
+    navSecondary: [
+      {
+        title: "Support",
+        url: "#",
+        icon: LifeBuoy,
+      },
+      {
+        title: "Feedback",
+        url: "#",
+        icon: Send,
+      },
+    ],
+    projects: [
+      {
+        name: "Design Engineering",
+        url: "#",
+        icon: Frame,
+      },
+      {
+        name: "Sales & Marketing",
+        url: "#",
+        icon: PieChart,
+      },
+      {
+        name: "Travel",
+        url: "#",
+        icon: Map,
+      },
+    ],
+  };
 
   React.useEffect(() => {
     setMounted(true);
@@ -177,7 +153,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </div>
           </SidebarMenuItem>
         </SidebarMenu>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );

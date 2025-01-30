@@ -1,13 +1,8 @@
 "use client";
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { ChevronsUpDown, CreditCard, LogOut, Sparkles } from "lucide-react";
+
+import { createClient } from "@/lib/supabase";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -36,6 +31,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const supabase = createClient();
 
   return (
     <SidebarMenu>
@@ -81,24 +77,18 @@ export function NavUser({
                 <Sparkles />
                 Upgrade to Pro
               </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
                 Billing
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await supabase.auth.signOut();
+                window.location.href = "/signin";
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>
